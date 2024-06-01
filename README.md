@@ -35,7 +35,7 @@ This project is intended to be our final project in CSE 185: Advanced Bioinforma
 An alignment is a process of arranging DNA, RNA, or protein sequences to identify regions of similarity. These similarities can be due to functional, structural, or evolutionary relationships. Alignments help in comparing sequences to find conserved regions, which are important for understanding biological functions and evolutionary histories.
 
 ### Application of Alignments
-Alignments are used in many fields:
+Alignments are used in many fields. Here are some examples of many:
 - **Comparative Genomics:** Identifying conserved sequences across different species
 - **Phylogenetics:** Constructing evolutionary trees
 - **Evolutionary Studies:** Investigating the evolutionary relationships between organisms
