@@ -20,7 +20,7 @@ This project implements a method to perform local alignment of DNA sequences, fo
   - [Requirements](#requirements)
   - [Installation](#installation)
   - [Usage](#usage)
-  - [File Formats -- Output](#file-formats)
+  - [File Output Format](#file-output-format)
 - [Why should I run it? (Benchmarking Analysis)](#why-should-i-run-it-benchmarking-analysis)
 
 ## Contributors
@@ -85,7 +85,7 @@ An example FASTA file from Lab 1, the public 'Genomes' folder (`hg19.fa`), is in
 python run_alignmentfilenameputhere.py data/hg19.fa -m 1 -s -1 -d -2 -a -o output.txt -p
 ```
 
-## File Formats -- Output
+## File Output Format
 The output file will contain the aligned sequences with their scores and lengths. Example format:
 ```plaintext
 >seq 1|score: 10|length: 50
