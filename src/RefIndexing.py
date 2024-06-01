@@ -1,9 +1,12 @@
 from collections import Counter, defaultdict
+from typing import Any
 
 import numpy as np
 import pandas as pd
 import os
 import array
+
+from natsort.utils import SupportsDunderLT, SupportsDunderGT
 
 
 # think of reference as the hg19 provided in
@@ -15,15 +18,17 @@ class referenceGenome:
         self.bwt = self.bwt_from_suffix_array(self.sequence, self.array)
         self.total_counts, self.occ_counts_before = self.build_fm_index(self.bwt)
 
-    def read_reference_genome(self, path:str)-> (str,str):
+    def read_reference_genome(self, path: str) -> (str, str):
         with open(path, "r") as file:
             lines = file.readlines()
         sequence_id = lines[0].strip().lstrip('>').rstrip()
         sequence = ''.join(line.strip() for line in lines[1:])
         return sequence_id, self.filter_unknown_regions(sequence)
-    def filter_unknown_regions(self, sequence:str)->str:
+
+    def filter_unknown_regions(self, sequence: str) -> str:
         return sequence.replace("N", "")
-    def suffix_array_construction(self,s):
+
+    def suffix_array_construction(self, s: str) -> np.ndarray:
         """Constructs the suffix array of a given string s using SA-IS algorithm."""
         s = s + "$"
         n = len(s)
@@ -80,16 +85,16 @@ class referenceGenome:
                 suffix_array[i] = p[i]
 
         sort_cyclic_shifts()
-        return suffix_array
+        return np.array(suffix_array)
 
     # Function to create BWT from suffix array
-    def bwt_from_suffix_array(self,s, suffix_array):
+    def bwt_from_suffix_array(self, s: str, suffix_array: np.ndarray) -> np.ndarray:
         s = s + "$"
         bwt = ''.join(s[i - 1] if i > 0 else s[-1] for i in suffix_array)
         return bwt
 
     # Function to build the FM-index (C array and O table)
-    def build_fm_index(self,bwt):
+    def build_fm_index(self, bwt: np.ndarray) -> ( dict[SupportsDunderLT | SupportsDunderGT, int], defaultdict[Any, list[int]]):
         # C array
         counts = Counter(bwt)
         total_counts = dict()
@@ -109,7 +114,7 @@ class referenceGenome:
         return total_counts, occ_counts_before
 
     # Function for backward search using FM-index
-    def backward_search(self,pattern, bwt, suffix_array, total_counts, occ_counts_before):
+    def backward_search(self, pattern, bwt, suffix_array, total_counts, occ_counts_before):
         l, r = 0, len(bwt) - 1
         for char in reversed(pattern):
             l = total_counts[char] + occ_counts_before[char][l]
@@ -119,9 +124,14 @@ class referenceGenome:
         return suffix_array[l:r + 1]
 
 
+import time
 
+start_time = time.time()
+ref = referenceGenome("../data/hg19.fa")
+end_time = time.time()
 
-ref =referenceGenome("../data/hg19.fa")
-
-output = ref.backward_search("GTACGAGCTCAACGACGGTAAAGAGGAT", ref.bwt, ref.array,ref.total_counts, ref.occ_counts_before)
+output = ref.backward_search("CAGAGGGGTTTTGTGCCACTTCTGGATGCTAGGGTTACACTGGGAGACAC", ref.bwt, ref.array, ref.total_counts,
+                             ref.occ_counts_before)
 print(output)
+execution_time = end_time - start_time
+print(f"The function took {execution_time} seconds to execute.")
