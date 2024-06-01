@@ -17,7 +17,6 @@ This project implements a method to perform local alignment of DNA sequences, fo
   - [Application of Alignments](#application-of-alignments)
   - [What is BWT and exact matching filter?](#what-is-bwt-and-exact-matching-filter)
 - [How do I run it?](#how-do-i-run-it)
-  - [Requirements](#requirements)
   - [Installation](#installation)
   - [Usage](#usage)
   - [File Output Format](#file-output-format)
@@ -46,9 +45,6 @@ TODO
 
 # How do I Run it?
 
-## Requirements
-TODO
-
 ## Installation
 Clone the repository and navigate to the project directory:
 ```sh
@@ -56,7 +52,7 @@ git clone https://github.com/ADDOURLINKHERe
 cd ADD
 ```
 
-Ensure you have Python 3.x and the necessary packages installed:
+ADD REQUIREMENTS AND VERSIONS HEREEEEEEEEE:
 ```sh
 pip install numpy
 pip install matplotlib
