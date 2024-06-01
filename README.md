@@ -20,7 +20,7 @@ This project implements a method to perform local alignment of DNA sequences, fo
   - [Requirements](#requirements)
   - [Installation](#installation)
   - [Usage](#usage)
-  - [File Formats](#file-formats)
+  - [File Formats -- Output](#file-formats)
 - [Why should I run it? (Benchmarking Analysis)](#why-should-i-run-it-benchmarking-analysis)
 
 ## Contributors
