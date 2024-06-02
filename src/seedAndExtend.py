@@ -1,6 +1,8 @@
-import time
 import argparse
+import time
+
 from Bio import SeqIO
+
 from ReferenceIndexing import referenceGenome as referenceGenome
 
 # Parameters for seed and extend
@@ -10,17 +12,21 @@ DEFAULT_GAP_PENALTY = -2
 DEFAULT_MISMATCH_PENALTY = -1
 DEFAULT_MATCH_SCORE = 2
 
+
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Seed and Extend BWT Aligner")
     parser.add_argument('-k', '--k', type=int, default=DEFAULT_K, help='Length of k-mer for seeding')
-    parser.add_argument('-mt', '--mismatch_threshold', type=int, default=DEFAULT_MISMATCH_THRESHOLD, help='Threshold for mismatches')
+    parser.add_argument('-mt', '--mismatch_threshold', type=int, default=DEFAULT_MISMATCH_THRESHOLD,
+                        help='Threshold for mismatches')
     parser.add_argument('-d', '--gap_penalty', type=int, default=DEFAULT_GAP_PENALTY, help='Penalty for gaps')
-    parser.add_argument('-s', '--mismatch_penalty', type=int, default=DEFAULT_MISMATCH_PENALTY, help='Penalty for mismatches')
+    parser.add_argument('-s', '--mismatch_penalty', type=int, default=DEFAULT_MISMATCH_PENALTY,
+                        help='Penalty for mismatches')
     parser.add_argument('-m', '--match_score', type=int, default=DEFAULT_MATCH_SCORE, help='Score for matches')
     parser.add_argument('-r', '--reference_path', type=str, required=True, help='Path to reference genome file')
     parser.add_argument('-i', '--read_path', type=str, required=True, help='Path to reads file')
     parser.add_argument('-o', '--output_file', type=str, required=True, help='Path to output SAM file')
     return parser.parse_args()
+
 
 def seed_and_extend_bwt(query, reference, k, mismatch_threshold):
     seeds = []
@@ -32,6 +38,7 @@ def seed_and_extend_bwt(query, reference, k, mismatch_threshold):
             if match_length > k:
                 seeds.append((i, pos, match_length, mismatches))
     return seeds
+
 
 def extend_match(query, reference, query_start, ref_start, seed_length, mismatch_threshold):
     match_length = seed_length
@@ -55,13 +62,16 @@ def extend_match(query, reference, query_start, ref_start, seed_length, mismatch
         match_length += 1
     return match_length, mismatches
 
+
 def obtain_reads(path_reads):
     sequences = {}
     for record in SeqIO.parse(path_reads, "fastq"):
         sequences[record.id] = (str(record.seq), record.letter_annotations["phred_quality"])
     return sequences
 
-def align(query, ref, query_start, ref_start, match_length, mismatch_penalty, gap_penalty, match_score, mismatch_threshold):
+
+def align(query, ref, query_start, ref_start, match_length, mismatch_penalty, gap_penalty, match_score,
+          mismatch_threshold):
     alignment_score = 0
     mismatches = 0
     i, j = query_start, ref_start
@@ -84,6 +94,7 @@ def align(query, ref, query_start, ref_start, match_length, mismatch_penalty, ga
 
     return aligned_query, aligned_ref, alignment_score, mismatches
 
+
 def calculate_md_tag(aligned_query, aligned_ref):
     md_tag = ""
     matches = 0
@@ -99,16 +110,20 @@ def calculate_md_tag(aligned_query, aligned_ref):
         md_tag += str(matches)
     return md_tag
 
+
 def write_sam_header(ref, output_file):
     with open(output_file, 'w') as f:
         f.write("@HD\tVN:1.0\tSO:unsorted\n")
         for i in range(len(ref.sequence_ids)):
             f.write(f"@SQ\tSN:{ref.sequence_ids[i].replace('>', '')}\tLN:{ref.indexes[ref.sequence_ids[i]]}\n")
 
-def write_sam_record(output_file, query_id, flag, ref_id, ref_start, mapq, cigar, rnext, pnext, tlen, seq, qual, nm, md, as_score, xs):
+
+def write_sam_record(output_file, query_id, flag, ref_id, ref_start, mapq, cigar, rnext, pnext, tlen, seq, qual, nm, md,
+                     as_score, xs):
     with open(output_file, 'a') as f:
         f.write(
             f"{query_id}\t{flag}\t{ref_id}\t{ref_start + 1}\t{mapq}\t{cigar}\t{rnext}\t{pnext}\t{tlen}\t{seq}\t{qual}\tNM:i:{nm}\tMD:Z:{md}\tAS:i:{as_score}\tXS:i:{xs}\n")
+
 
 def main():
     args = parse_arguments()
@@ -158,6 +173,7 @@ def main():
     execution_time = end_time - start_time
     print(f"Seeding and alignment took {execution_time} seconds to execute.")
     print("\n")
+
 
 if __name__ == "__main__":
     main()
