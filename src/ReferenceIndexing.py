@@ -1,33 +1,106 @@
+import os
 from collections import Counter, defaultdict
-from typing import Any
-from Bio import SeqIO
 
 import numpy as np
-import pandas as pd
-import os
-import array
-
-from natsort.utils import SupportsDunderLT, SupportsDunderGT
 
 
-# think of reference as the hg19 provided in
 class referenceGenome:
     def __init__(self, path):
         self.path = path
-        self.sequence_id, self.sequence = self.read_reference_genome(self.path)
-        self.array = self.suffix_array_construction(self.sequence)
-        self.bwt = self.bwt_from_suffix_array(self.sequence, self.array)
+        reads = self.read_file()
+        self.sequence_ids = list(reads.keys())
+        self.sequence = ''.join(reads.values())
+        self.indexes = self.data_in()
+
+        # self.sequence_id, self.sequence = self.read_reference_genome(self.path)
+
+        # creating index files + overall index of the sequences provided in the reference
+        self.suffix_array = self.suffix_array_construction(self.sequence)
+        self.bwt = self.bwt_from_suffix_array(self.sequence, self.suffix_array)
         self.total_counts, self.occ_counts_before = self.build_fm_index(self.bwt)
 
-    def read_reference_genome(self, path: str) -> (str, str):
-        with open(path, "r") as file:
-            lines = file.readlines()
-        sequence_id = lines[0].strip().lstrip('>').rstrip()
-        sequence = ''.join(line.strip() for line in lines[1:])
-        return sequence_id, self.filter_unknown_regions(sequence)
+    # reading fasta file
+    def read_file(self):
+        samples = {}
+        header = None
+        with open(self.path, 'r') as file:
+            for line in file:
+                line = line.strip()
+                if line.startswith(">"):
+                    header = line
+                    samples[header] = ""
+                else:
+                    samples[header] += line.strip()
+        return samples
 
-    def filter_unknown_regions(self, sequence: str) -> str:
-        return sequence.replace("N", "")
+    def data_seq(self, samples):
+        output_file = "./reference.seq"
+        out = ""
+        if os.path.exists(output_file):
+            option = "w"
+        else:
+            option = "x"
+        with open(output_file, option) as file:
+            sequences = list(samples.values())
+            for i in range(len(sequences)):
+                file.write(sequences[i])
+                out += sequences[i]
+                if i != len(sequences) - 1:
+                    file.write("@")
+                    out += "@"
+        return out
+
+    # indexing file for later use 
+
+    def get_index(self, key, samples, out_seq):
+        sequences = out_seq.split("@")
+        array_index = sequences.index(samples[key])
+        count = 0
+        for i in range(array_index):
+            count += len(sequences[i]) + 1  # one for @
+        return count
+
+    def data_in(self):
+        indexes = {}
+        samples = self.read_file()
+        out_seq = self.data_seq(samples)
+        output_file = "./reference.in"
+        if os.path.exists(output_file):
+            option = "w"
+        else:
+            option = "x"
+        with open(output_file, option) as file:
+            for key in samples.keys():
+                index = self.get_index(key, samples, out_seq)
+                indexes[key] = index
+                file.write(f"{key}\t{index}\n")
+        return indexes
+
+    def binarySearch(self, i, j, value):
+        index_array = list(self.indexes.values())
+        while i <= j:
+            if i == len(index_array) and j == len(index_array):
+                return len(index_array) - 1
+            m = (i + j) // 2
+            if m == len(index_array):
+                m = len(index_array) - 1
+            if index_array[m] == value:
+                return m
+            if index_array[m - 1] <= value and value < index_array[m]:
+                return m - 1
+
+            elif index_array[m] > value:
+                j = m - 1
+            else:
+                i = m + 1
+        return None
+
+    def chromosome_of_origin(self, index):
+        value_index = self.binarySearch(0, len(list(self.indexes.values())), index)
+        if value_index is not None:
+            return list(self.indexes.keys())[value_index].split(" ")[0].replace(">", "")
+        else:
+            return "unknown"
 
     def suffix_array_construction(self, s: str) -> np.ndarray:
         """Constructs the suffix array of a given string s using SA-IS algorithm."""
@@ -95,7 +168,7 @@ class referenceGenome:
         return bwt
 
     # Function to build the FM-index (C array and O table)
-    def build_fm_index(self, bwt: np.ndarray) -> ( dict[SupportsDunderLT | SupportsDunderGT, int], defaultdict[Any, list[int]]):
+    def build_fm_index(self, bwt: np.ndarray):
         # C array
         counts = Counter(bwt)
         total_counts = dict()
@@ -115,24 +188,16 @@ class referenceGenome:
         return total_counts, occ_counts_before
 
     # Function for backward search using FM-index
-    def backward_search(self, pattern, bwt, suffix_array, total_counts, occ_counts_before):
-        l, r = 0, len(bwt) - 1
+    def backward_search(self, pattern):
+        l, r = 0, len(self.bwt) - 1
         for char in reversed(pattern):
-            l = total_counts[char] + occ_counts_before[char][l]
-            r = total_counts[char] + occ_counts_before[char][r + 1] - 1
+            if char == 'N':
+                continue  # Skip 'N' characters
+            try:
+                l = self.total_counts[char] + self.occ_counts_before[char][l]
+                r = self.total_counts[char] + self.occ_counts_before[char][r + 1] - 1
+            except KeyError:
+                return []  # Return empty list if char is not found in total_counts
             if l > r:
                 return []
-        return suffix_array[l:r + 1]
-
-
-# import time
-#
-# start_time = time.time()
-# ref = referenceGenome("../data/hg19.fa")
-# end_time = time.time()
-#
-# output = ref.backward_search("CAGAGGGGTTTTGTGCCACTTCTGGATGCTAGGGTTACACTGGGAGACAC", ref.bwt, ref.array, ref.total_counts,
-#                              ref.occ_counts_before)
-# print(output)
-# execution_time = end_time - start_time
-# print(f"The function took {execution_time} seconds to execute.")
+        return self.suffix_array[l:r + 1]
