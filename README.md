@@ -94,7 +94,7 @@ python seedAndExtend.py [options]
 - `-i, --read_path`: Path to the reads file. **Required**.
 - `-o, --output_file`: Path to the output SAM file. **Required**.
 
-**Test Dataset Command:**
+## Test Dataset Command:
 
 To run a test example with default parameters, copy the following command:
 
