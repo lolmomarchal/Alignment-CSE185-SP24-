@@ -13,6 +13,7 @@ The BWT Sequence Aligner is a tool that implements a sequence aligner using the 
 ## Table of Contents
 
 - [Contributors](#contributors)
+- [File Descriptions](#file-descriptions)
 - [So...what is an Alignment](#sowhat-is-an-alignment)
   - [Application of Alignments](#application-of-alignments)
   - [What is BWT and FM Index](#what-is-bwt-and-fm-index)
@@ -33,12 +34,12 @@ This project is intended to be our final project in CSE 185: Advanced Bioinforma
 Here is a brief description of the files:
 
 #### Code Files
-- The `ReferenceIndexing.py` file implements the indexing of a reference genome sequence using the Burrows-Wheeler Transform (BWT) and the FM-index. This indexing process efficiently preprocesses the reference genome sequence to enable fast pattern matching and retrieval of substring occurrences.
-- The `seedAndExtend.py` file implements a local alignment approach. It first identifies potential seed matches between the query sequence and the reference genome using exact matching with a k-mer approach. Then, it extends these seeds locally to find the best alignment between the sequences. This local alignment strategy allows for more accurate alignments, particularly in regions where sequences may differ due to insertions, deletions, or substitutions.
+- The `ReferenceIndexing.py` file implements the indexing of a reference genome sequence using the Burrows-Wheeler Transform (BWT) and the FM-index. 
+- The `seedAndExtend.py` file implements a local alignment approach. It first identifies potential seed matches between the query sequence and the reference genome using exact matching with a k-mer approach. Then, it extends these seeds locally to find the best alignment between the sequences. 
 
 #### Data
-- The `ERR10021327.fastq` file is a publically available query file containing the reads that are to be aligned. This reads file is from from [ENA project PRJEB37886](https://www.ebi.ac.uk/ena/browser/view/PRJEB37886). 
-- The `sequence.fasta` file is a publically available reference genome file is from [NCBI accession ERR10021327](https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2).
+- The `ERR10021327.fastq` file is a publically available query file containing the reads that are to be aligned. This reads file is from [ENA project PRJEB37886](https://www.ebi.ac.uk/ena/browser/view/PRJEB37886). 
+- The `sequence.fasta` file is a publically available reference genome file from [NCBI accession ERR10021327](https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2).
 
 ## So...what is an Alignment?
 An alignment is a process of arranging DNA, RNA, or protein sequences to identify regions of similarity. These similarities can be due to functional, structural, or evolutionary relationships. Alignments help in comparing sequences to find conserved regions, which are important for understanding biological functions and evolutionary histories.
@@ -102,7 +103,7 @@ python seedAndExtend.py -r reference.fasta -i reads.fastq -o output.sam
 ```
 
 ### Public Dataset 
-The publically available FASTq file we are using is `ERR10021327.fastq`, which was described earlier, while the reference we are using is titled `sequence.fasta`. You can find these files in the `data` directory. Simply copy and modify the names of the files in the command above (from Test Dataset Command). If you have time, give it a try :)
+The publically available FASTq file we are using is `ERR10021327.fastq`, which was described earlier, while the reference we are using is titled `sequence.fasta`. You can find these files in the `data` directory. Simply copy and modify the names of the files into the command above (from Test Dataset Command). If you have time, give it a try :)
 
 ## File Output Format
 The SAM output file contains the alignment results of the sequencing reads against the reference genome. Each line represents a single alignment record, and the fields are tab-separated similar to how it appears using `bwa`. Example format:
