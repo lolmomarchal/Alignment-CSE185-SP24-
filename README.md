@@ -1,21 +1,21 @@
-# Alignment-CSE185-SP24-
+# BWT Sequence Aligner-CSE185-SP24-
 
 ## Overview
-This project implements a method to perform local alignment of DNA sequences, following the BWT (Burrows-Wheeler Transform) and exact matching filter approach similar to `bwa mem`. The tool reads sequences from a FASTA file, performs BWT, applies exact matching, and then aligns the sequences, outputting the results, including alignment scores and lengths.
+The BWT Sequence Aligner is a tool that implements a sequence aligner using the Burrows-Wheeler Transform (BWT) and FM-index for efficient pattern matching and sequence alignment. This approach is similar to `bwa mem`, a tool we used in lab. The tool reads sequencing reads from a FASTQ file, aligns them to a reference genome, and outputs the alignment results in SAM (Sequence Alignment/Map) format.
 
 ## Features
-- BWT transformation and exact matching filter
+- BWT transformation
+- FM index
 - Local alignment
 - Command-line utility for easy use
-- Outputs alignment results to a specified file
-- Optionally plots the distribution of alignment lengths
+- Outputs results to a specified SAM file
 
 ## Table of Contents
 
 - [Contributors](#contributors)
 - [So...what is an Alignment](#sowhat-is-an-alignment)
   - [Application of Alignments](#application-of-alignments)
-  - [What is BWT and exact matching filter?](#what-is-bwt-and-exact-matching-filter)
+  - [What is BWT](#what-is-bwt)
 - [How do I run it?](#how-do-i-run-it)
   - [Installation](#installation)
   - [Usage](#usage)
@@ -30,6 +30,16 @@ This project implements a method to perform local alignment of DNA sequences, fo
 
 This project is intended to be our final project in CSE 185: Advanced Bioinformatics Laboratory for the Spring 2024 quarter, to be presented to our peers and Professor Melissa Gyrmrek.
 
+## File Descriptions
+Here is a brief description of the files:
+
+#### Code Files
+- The `ReferenceIndexing.py` file implements the indexing of a reference genome sequence using the Burrows-Wheeler Transform (BWT) and the FM-index. This indexing process efficiently preprocesses the reference genome sequence to enable fast pattern matching and retrieval of substring occurrences.
+- The `seedAndExtend.py` file implements a local alignment approach. It first identifies potential seed matches between the query sequence and the reference genome using exact matching with a k-mer approach. Then, it extends these seeds locally to find the best alignment between the sequences. This local alignment strategy allows for more accurate alignments, particularly in regions where sequences may differ due to insertions, deletions, or substitutions.
+
+#### Data
+- 
+
 ## So...what is an Alignment?
 An alignment is a process of arranging DNA, RNA, or protein sequences to identify regions of similarity. These similarities can be due to functional, structural, or evolutionary relationships. Alignments help in comparing sequences to find conserved regions, which are important for understanding biological functions and evolutionary histories.
 
@@ -40,8 +50,8 @@ Alignments are used in many fields. Here are some examples of many:
 - **Evolutionary Studies:** Investigating the evolutionary relationships between organisms
 - **Medical Research:** Identifying mutations associated with diseases
 
-### What is BWT and exact matching filter?
-TODO
+### What is a BWT
+
 
 # How do I Run it?
 
