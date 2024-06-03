@@ -16,7 +16,7 @@ The BWT Sequence Aligner is a tool that implements a sequence aligner using the 
 - [File Descriptions](#file-descriptions)
 - [So...what is an Alignment](#sowhat-is-an-alignment)
   - [Application of Alignments](#application-of-alignments)
-  - [What is BWT and FM Index](#what-is-BWT-and-FM-index)
+  - [What is BWT and FM Index](#what-is-bwt-and-fm-index)
 - [How do I run it?](#how-do-i-run-it)
   - [Installation](#installation)
   - [Usage](#usage)
