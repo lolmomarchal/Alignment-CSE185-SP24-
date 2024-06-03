@@ -51,7 +51,7 @@ Alignments are used in many fields. Here are some examples of many:
 - **Evolutionary Studies:** Investigating the evolutionary relationships between organisms
 - **Medical Research:** Identifying mutations associated with diseases
 
-### What is a BWT and FM Index
+### What is BWT and FM Index
 
 1. **Burrows-Wheeler Transform (BWT):**
    - It groups identical or similar characters closer to each other; useful for pattern matching.
