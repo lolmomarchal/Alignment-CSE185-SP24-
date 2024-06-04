@@ -1,5 +1,6 @@
 import os
 from collections import Counter, defaultdict
+from typing import Optional
 
 import numpy as np
 
@@ -22,7 +23,7 @@ class ReferenceGenome:
         data_seq: Writes the sequences to a file.
         get_index: Gets the index of the sequence in the concatenated sequences.
         data_in: Writes the indexes of the sequences to a file.
-        binarySearch: Performs a binary search on the indexes of the sequences.
+        binary_search: Performs a binary search on the indexes of the sequences.
         chromosome_of_origin: Gets the chromosome of origin of a sequence given its index.
         sort_cyclic_shifts: Sorts the cyclic shifts of a string s using SA-IS algorithm.
         suffix_array_construction: Constructs the suffix array of a given string s using SA-IS algorithm.
@@ -144,7 +145,7 @@ class ReferenceGenome:
                 file.write(f"{key}\t{index}\n")
         return indexes
 
-    def binarySearch(self, i: int, j: int, value: int) -> int | None:
+    def binary_search(self, i: int, j: int, value: int) -> Optional[int]:
         """Performs a binary search on the indexes of the sequences.
 
         Args:
@@ -153,7 +154,7 @@ class ReferenceGenome:
             value (int): The value to search for.
 
         Returns:
-            int | None: The index of the sequence in the concatenated sequences,
+            Optional[int]: The index of the sequence in the concatenated sequences,
             if it exists.
         """
         index_array: list[int] = list(self.indexes.values())
@@ -182,7 +183,7 @@ class ReferenceGenome:
         Returns:
             str: The chromosome of origin of the sequence, or "unknown".
         """
-        value_index: int | None = self.binarySearch(0, len(list(self.indexes.values())), index)
+        value_index: Optional[int] = self.binary_search(0, len(list(self.indexes.values())), index)
         if value_index is not None:
             return list(self.indexes.keys())[value_index].split(" ")[0].replace(">", "")
         else:
