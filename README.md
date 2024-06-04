@@ -92,7 +92,7 @@ python ./src/seed_and_extend.py -r ./data/sequence.fasta -i ./data/ERR10021327.f
 
 ### [Benchmarking Analysis](/benchmarking/)
 
-Read more about how our tool compares to the standard tools out there: [Why Should I Run It?](#why-should-i-run-it)
+- [`analysis.ipynb`](/benchmarking/analysis.ipynb): A Jupyter Notebook that contains our tool with `bwa`, one of the standard tools for alignment. Read more about how our tool compares to the standard tools out there: [Why Should I Run It?](#why-should-i-run-it)
 
 [🔼 Back to top](#bwt-sequence-aligner-cse185-sp24-)
 
