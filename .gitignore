@@ -1,0 +1,3 @@
+*.in
+*.seq
+src/__pycache__

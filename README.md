@@ -48,8 +48,9 @@ This project is intended to be our final project in CSE 185: Advanced Bioinforma
 File Tree:
 
 ```txt
+│   .gitignore
 │   README.md
-|   requirements.txt
+│   requirements.txt
 ├───benchmarking
 ├───data
 │       chimpref.fa
@@ -67,6 +68,8 @@ Here is a brief description of our files:
 [`README.md`](/README.md): This file you're reading! 👋 We hope you're enjoying it.
 
 [`requirements.txt`](/requirements.txt): The modules one is *required* to install in order to run this tool. More details about installation can be found [here](#installation).
+
+[`.gitignore`](/.gitignore): Just something to keep the repo clean.
 
 ### [Source Code](/src/)
 
@@ -136,7 +139,7 @@ git clone https://github.com/lolmomarchal/Alignment-CSE185-SP24-.git
 cd ./Alignment-CSE185-SP24-.git
 ```
 
-ADD REQUIREMENTS AND VERSIONS HEREEEEEEEEE. Also what python version:
+We recommend Python 3.10+ for full compatibility with type annotations, but versions 3.5+ should also work given some minor changes in the source code.
 
 ```sh
 pip install -r requirements.txt
