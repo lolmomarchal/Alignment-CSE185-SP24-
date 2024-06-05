@@ -53,7 +53,6 @@ File Tree:
 │   requirements.txt
 ├───benchmarking
 ├───data
-│       chimpref.fa
 │       ERR10021327.fastq
 │       sequence.fasta
 ├───results
@@ -78,7 +77,6 @@ Here is a brief description of our files:
 
 ### [Example Data](/data/)
 
-- [`chimpref.fa`](/data/chimpref.fa):
 - [`ERR10021327.fastq`](/data/ERR10021327.fastq): a publically available query file containing the reads to be aligned, from the [ENA project PRJEB37886](https://www.ebi.ac.uk/ena/browser/view/PRJEB37886).
 - [`sequence.fasta`](/data/sequence.fasta): a publically available reference genome file from [NCBI accession ERR10021327](https://www.ncbi.nlm.nih.gov/nuccore/NC_045512.2).
 
