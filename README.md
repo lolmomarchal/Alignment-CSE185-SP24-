@@ -210,7 +210,3 @@ To sum it up, this alignment record represents the alignment of a sequencing rea
 Read more about the SAM file format [here](https://samtools.github.io/hts-specs/SAMv1.pdf).
 
 [🔼 Back to top](#bwt-sequence-aligner-cse185-sp24-)
-
-## Why Should I Run It?
-
-[🔼 Back to top](#bwt-sequence-aligner-cse185-sp24-)
